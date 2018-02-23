@@ -1,0 +1,15 @@
+.board {
+    display:flex;
+    width:800px;
+   
+    
+}
+
+.column {
+    flex:1;
+    border: 2px solid black;
+    height: 600px;
+    width: 50px;
+    flex-direction: column-reverse;
+    
+}
