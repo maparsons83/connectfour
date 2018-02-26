@@ -6,10 +6,26 @@
 }
 
 .column {
-    flex:1;
+    display: flex;
     border: 2px solid black;
-    height: 600px;
+    height: 320px;
     width: 50px;
     flex-direction: column-reverse;
     
+}
+
+.circle {
+    
+    height: 50px;
+    border-radius: 50%;
+    
+    border: 2px solid black;
+}
+
+.red {
+    background-color: red;
+}
+
+.black {
+    background-color: black;
 }
