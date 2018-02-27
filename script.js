@@ -1,58 +1,45 @@
-const red = document.getElementById('redCircle');
-const black = document.getElementById('blackCircle')
+// var piecesToCheck = [columns[x].children[y + 1], columns[x].children[y + 2], columns[x][y + 3]];
+// var allAlike = piecesToCheck.every(function(piece)) {
+//     return piece === cell;
 
-// Need to add functionality for 2nd player.
-
-
+// }
 var columns = document.querySelectorAll('.column');
 var currentPlayer = "red";
 
 // Need alternating colored discs on click
 
-handleClick = function(event) {
+handleClick = function (event) {
 
 
 
     let column = event.currentTarget;
-    if (column.childElementCount===6) {
+    if (column.childElementCount === 6) {
         return;
     }
-        
-    
-    let button = document.createElement('div');
-    button.classList.add ('circle',currentPlayer);
 
+
+    let button = document.createElement('div');
+    button.classList.add('circle', currentPlayer);
+    
     column.appendChild(button);
+    // button.id = 'row' + (column.childElementCount - 1) + '-' + currentPlayer;
+    button.id = `row${column.childElementCount - 1}-${currentPlayer}`; // template string, and string interpolation
 
     if (currentPlayer === 'red') {
         currentPlayer = 'black'
     } else if (currentPlayer === 'black') {
         currentPlayer = 'red'
     }
-        
 
-
-   
-   
-
-    
-    console.log('handleClick');
-    // columns.textContent = red;
-    // columns.appendChild(columns);
-    // for(let y = board.length-1; y === 0; y--) {
-       
-
-
-    // }
+    checkRules();
 
 }
-for(var i = 0; i < columns.length; i++) {
+
+for (let i = 0; i < columns.length; i++) {
     columns[i].addEventListener('click', handleClick)
-    
 }
 
-// const edgeX = board[0].length - 2;
-// const edgeY = board.length - 2;
+
 
 // Need event listener to add 1 to the 6th y axis and then iterate
 // up the y axis by 1 each time the column is clicked.
@@ -61,63 +48,94 @@ for(var i = 0; i < columns.length; i++) {
 // current win conditions will only work for one player
 // Need alerts added to win conditions.
 
-function checkWinner() {
+function findWinner(cell, yList, xList) {
+    var piecesToCheck = [
+        columns[yList[0]] ? (columns[yList[0]].children[xList[0]] || null) : null,
+        columns[yList[1]] ? (columns[yList[1]].children[xList[1]] || null) : null,
+        columns[yList[2]] ? (columns[yList[2]].children[xList[2]] || null) : null
+    ];
+    // console.log(piecesToCheck)
+    
+    const allAlike = piecesToCheck.every(function (nextCell) {
+        if (nextCell) {
+            // deconstructing the ID to get the player ('red' or 'black')
+            const thisCellPlayer = cell.id.split('-')[1];
+            const nextCellPlayer = nextCell.id.split('-')[1];
+            return nextCellPlayer == thisCellPlayer;
+        }
+    })
+    
+    if (allAlike) {
+        const winningPlayer = cell.id.split('-')[1];
+        return winningPlayer;
+    } else {
+        return false;
+    }
+}
 
-    for(let y = 0; y < board.length; y++) {
+function checkRules() {
 
-        for(let x = 0; x < edgeX; x++) {
-            let cell = board[y][x];
 
-            if(cell != 0) {
-                
-                if(cell === board[y][x+1] && cell === board[y][x+2] && cell === board[y][x+3]) {
-                    alert('Player Wins')
-                }
+
+    // check horizontal win
+    for (let y = 0; y < columns.length; y++) {
+
+        for (let x = 0; x < columns[y].children.length; x++) {
+            let cell = columns[y].children[x];
+
+            const winner = findWinner(cell, [x, x, x], [y + 1, y + 2, y + 3])
+
+            if (winner) {
+                alert(winner + ' wins vertically')
             }
+
         }
     }
 
-    for(let y = 0; y < edgeY; y++) {
 
-        for(let x = 0; x < board[0].length; x++) {
-            cell = board[y][x];
+    diagonalUp:
+        for (let y = 0; y < columns.length; y++) {
 
-            if(cell != 0) {
+            for (let x = 0; x < columns[y].children.length; x++) {
+                let cell = columns[y].children[x];
 
-                if(cell === board[y+1][x] && cell === board[y+2][x] && cell === board[y+3][x]){
-                    alert('Player Wins')
+                const winner = findWinner(cell, [y + 1, y + 2, y + 3], [x, x, x]);
+
+                if (winner) {
+                    alert(winner + ' wins horizontally')
                 }
             }
         }
-    }
 
-    for(let y = 0; y < edgeY; y++){
 
-        for(let x = 0; x < edgeX; x++) {
-            cell = board[y][x];
+    for (let y = 0; y < columns.length; y++) {
 
-            if(cell != 0) {
+        for (let x = 0; x < columns[y].children.length; x++) {
+            let cell = columns[y].children[x];
 
-                if(cell === board[y+1][x+1] && cell === board[y+2][x+2] && cell === board[y+3][x+3]) {
-                    alert('Player Wins')
+            const winner = findWinner(cell, [y + 1, y + 2, y + 3], [x + 1, x + 2, x + 3])
 
-                }
+            if (winner) {
+                alert(winner + ' wins by diagonal right')
             }
 
         }
+
+
     }
 
-    for(let y = 2; y < board.length; y++) {
 
-        for(let x = 0; x < edgeX; x++) {
-            cell = board[y][x];
+    for (let y = 2; y < columns.length; y++) {
 
-            if(cell != 0) {
+        for (let x = 0; x < columns[y].children.length; x++) {
+            let cell = columns[y].children[x];
 
-                if(cell === board[y-1][x+1] && cell === board[y-2][x+2] && cell === board[y-3][x+3]) {
-                    alert('Player Wins')
-                }
+            const winner = findWinner(cell, [y - 1, y - 2, y - 3], [x + 1, x + 2, x + 3]);
+
+            if (winner) {
+                alert(winner + ' wins by diagonal left')
             }
+
         }
     }
 }

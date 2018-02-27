@@ -1,31 +1,133 @@
+#title {
+    font-size: 40pt;
+    text-align: center;
+    color: white;
+    animation: jackInTheBox 2s;
+
+}
+
+body {
+    background-color: green;
+}
+
+#clear {
+    text-align: center;
+}
+
 .board {
     display:flex;
     width:800px;
-   
-    
+    border: 3px solid black;
+    margin: 0 auto;
+    justify-content: center;   
+    background-color: rgb(245, 245, 105);
+    box-shadow: 20px 20px;
 }
 
 .column {
     display: flex;
     border: 2px solid black;
-    height: 320px;
-    width: 50px;
-    flex-direction: column-reverse;
-    
+    height: 625px;
+    width: 105px;
+    flex-direction: column-reverse;  
 }
 
 .circle {
     
-    height: 50px;
-    border-radius: 50%;
-    
-    border: 2px solid black;
+    height: 100px;
+    border-radius: 50%;   
+    border: 1px solid black;
+    padding-bottom: 2px;
+
 }
+
+@keyframes bounceIn {
+    0% {
+      transform: scale(0.1);
+      opacity: 0;
+    }
+    60% {
+      transform: scale(1.2);
+      opacity: 1;
+    }
+    100% {
+      transform: scale(1);
+    }
+  }
 
 .red {
     background-color: red;
+    animation-name: bounceInDown;
+    animation-duration: 1s;
+
 }
 
 .black {
     background-color: black;
+    animation-name: bounceInDown;
+    animation-duration: 1s;
 }
+
+@keyframes bounceInDown {
+    from,
+    60%,
+    75%,
+    90%,
+    to {
+      -webkit-animation-timing-function: cubic-bezier(0.215, 0.61, 0.355, 1);
+      animation-timing-function: cubic-bezier(0.215, 0.61, 0.355, 1);
+    }
+  
+    0% {
+      opacity: 0;
+      -webkit-transform: translate3d(0, -3000px, 0);
+      transform: translate3d(0, -3000px, 0);
+    }
+  
+    60% {
+      opacity: 1;
+      -webkit-transform: translate3d(0, 25px, 0);
+      transform: translate3d(0, 25px, 0);
+    }
+  
+    75% {
+      -webkit-transform: translate3d(0, -10px, 0);
+      transform: translate3d(0, -10px, 0);
+    }
+  
+    90% {
+      -webkit-transform: translate3d(0, 5px, 0);
+      transform: translate3d(0, 5px, 0);
+    }
+  
+    to {
+      -webkit-transform: translate3d(0, 0, 0);
+      transform: translate3d(0, 0, 0);
+    }
+  }
+
+  @-webkit-keyframes jackInTheBox {
+    from {
+      opacity: 0;
+      -webkit-transform: scale(0.1) rotate(30deg);
+      transform: scale(0.1) rotate(30deg);
+      -webkit-transform-origin: center bottom;
+      transform-origin: center bottom;
+    }
+  
+    50% {
+      -webkit-transform: rotate(-10deg);
+      transform: rotate(-10deg);
+    }
+  
+    70% {
+      -webkit-transform: rotate(3deg);
+      transform: rotate(3deg);
+    }
+  
+    to {
+      opacity: 1;
+      -webkit-transform: scale(1);
+      transform: scale(1);
+    }
+  }
